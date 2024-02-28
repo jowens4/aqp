@@ -1,8 +1,11 @@
 version: "3.7"
 
 services:
+    flutter:
+        build: flutter
+        ports:
+          - 9000:9000
     web:
         build: nginx
         ports:
-          - 80:80
-          - 443:443
+          - 8000:8000
