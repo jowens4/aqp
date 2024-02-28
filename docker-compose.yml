@@ -4,6 +4,8 @@ services:
     fastapi:
         container_name: fastapi
         build: fastapi
+        ports:
+          - 8080:8080
 
     flutter:
         container_name: flutter
@@ -35,7 +37,7 @@ services:
           - PGADMIN_DEFAULT_EMAIL=jaowens14@protonmail.com
           - PGADMIN_DEFAULT_PASSWORD=aqp
         ports:
-          - "8765:8765"
+          - "8765:80"
         restart: always
 
 volumes:
