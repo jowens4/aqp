@@ -2,40 +2,41 @@ version: "3.7"
 
 services:
     fastapi:
-      container_name: fastapi
-      build: fastapi
+        container_name: fastapi
+        build: fastapi
 
     flutter:
         container_name: flutter
         build: flutter
         ports:
           - 9000:9000
+
     nginx:
         container_name: nginx
         build: nginx
         ports:
           - 80:80
 
-    #postgres:
-    #    container_name: postgres
-    #    image: postgres:latest
-    #    environment:
-    #      - POSTGRES_USER=${POSTGRES_USER}
-    #      - POSTGRES_PASSWORD=${POSTGRES_PW}
-    #      - POSTGRES_DB=${POSTGRES_DB} #optional (specify default database instead of $POSTGRES_DB)
-    #    ports:
-    #      - "5432:5432"
-    #    restart: always
-    #
-    #  pgadmin:
-    #    container_name: pgadmin
-    #    image: dpage/pgadmin4:latest
-    #    environment:
-    #      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_MAIL}
-    #      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_PW}
-    #    ports:
-    #      - "80:80"
-    #    restart: always
+    postgres:
+        container_name: postgres
+        image: postgres:latest
+        environment:
+          - POSTGRES_USER=aqp
+          - POSTGRES_PASSWORD=aqp
+          - POSTGRES_DB=aqp #optional (specify default database instead of $POSTGRES_DB)
+        ports:
+          - "5432:5432"
+        restart: always
+    
+    pgadmin:
+        container_name: pgadmin
+        image: dpage/pgadmin4:latest
+        environment:
+          - PGADMIN_DEFAULT_EMAIL=jaowens14@protonmail.com
+          - PGADMIN_DEFAULT_PASSWORD=aqp
+        ports:
+          - "8765:8765"
+        restart: always
 
 volumes:
   db-data:
