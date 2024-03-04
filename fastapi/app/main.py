@@ -4,11 +4,21 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.database import SessionLocal, engine
 
+from fastapi.middleware.cors import CORSMiddleware
+
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
+origins = ["*"]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -18,7 +28,7 @@ def get_db():
         db.close()
 
 
-@app.post("/users/", response_model=schemas.User)
+@app.post("/create_user/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
