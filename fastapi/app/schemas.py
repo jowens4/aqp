@@ -1,5 +1,21 @@
+from typing import List, Optional
 from pydantic import BaseModel
+from datetime import datetime
+from fastapi import UploadFile
 
+
+class Dogbone(BaseModel):
+    id: int
+    timestamp: Optional[datetime]
+    number: str
+    note: str
+    length: str
+    width: str
+    thickness: str
+    files: str
+
+    class Config:
+        orm_mode = True
 
 class ItemBase(BaseModel):
     title: str

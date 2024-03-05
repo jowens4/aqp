@@ -1,5 +1,5 @@
+#data base operations
 from sqlalchemy.orm import Session
-
 from app import models, schemas
 
 
@@ -22,6 +22,24 @@ def create_user(db: Session, user: schemas.UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+def create_dogbone(db: Session, dogbone: schemas.Dogbone):
+    db_dogbone = models.Dogbone(
+        number=dogbone.number, 
+        note=dogbone.note, 
+        length=dogbone.length,
+        width=dogbone.width,
+        thickness=dogbone.thickness,
+        files=dogbone.files,
+        timestamp=dogbone.timestamp)
+    db.add(db_dogbone)
+    db.commit()
+    db.refresh(db_dogbone)
+    return db_dogbone
+
+def get_dogbone_by_id(db: Session, dogbone_id: int):
+    return db.query(models.Dogbone).filter(models.Dogbone.id == dogbone_id).first()
+
 
 
 def get_items(db: Session, skip: int = 0, limit: int = 100):

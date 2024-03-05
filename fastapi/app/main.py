@@ -28,12 +28,21 @@ def get_db():
         db.close()
 
 
-@app.post("/create_user/", response_model=schemas.User)
+@app.post("/user/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db=db, user=user)
+
+
+@app.post("/dogbone/", response_model=schemas.Dogbone)
+def create_dogbone(dogbone: schemas.Dogbone, db: Session = Depends(get_db)):
+    db_dogbone = crud.get_dogbone_by_id(db, dogbone_id=dogbone.id)
+    if db_dogbone:
+        raise HTTPException(status_code=400, detail="dogbone already entered")
+    return crud.create_dogbone(db=db, dogbone=dogbone)
+
 
 
 @app.get("/users/", response_model=list[schemas.User])
