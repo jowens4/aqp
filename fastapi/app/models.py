@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime  # Import DateTime
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, LargeBinary # Import DateTime
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from app.database import Base
@@ -29,12 +29,13 @@ class Item(Base):
 
 class Dogbone(Base):
     __tablename__ = "dogbones"
-
-    id = Column(Integer, primary_key=True, index=True)
+    
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime)
     number = Column(String, index=True)
-    note = Column(String, index=True)  # Use 'note' to match Pydantic model
+    note = Column(String, index=True)
     length = Column(String)
     width = Column(String)
     thickness = Column(String)
-    timestamp = Column(DateTime)
-    files = Column(String) # need to use a real file
+    file_name = Column(String)
+    file_data = Column(String)

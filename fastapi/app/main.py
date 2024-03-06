@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
 origins = ["*"]
 
@@ -36,13 +36,16 @@ def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     return crud.create_user(db=db, user=user)
 
 
-@app.post("/dogbone/", response_model=schemas.Dogbone)
-def create_dogbone(dogbone: schemas.Dogbone, db: Session = Depends(get_db)):
-    db_dogbone = crud.get_dogbone_by_id(db, dogbone_id=dogbone.id)
-    if db_dogbone:
-        raise HTTPException(status_code=400, detail="dogbone already entered")
+@app.post("/dogbones/", response_model=schemas.Dogbone)
+def create_dogbone(dogbone: schemas.DogboneCreate, db: Session = Depends(get_db)):
+    # Assuming you have a user_id associated with the dogbone, you can get it from the token or another source
     return crud.create_dogbone(db=db, dogbone=dogbone)
 
+
+@app.get("/dogbones/", response_model=list[schemas.Dogbone])
+def read_dogbones(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    dogbones = crud.get_dogbones(db, skip=skip, limit=limit)
+    return dogbones
 
 
 @app.get("/users/", response_model=list[schemas.User])
