@@ -6,6 +6,8 @@ services:
         build: fastapi
         ports:
           - 8080:8080
+        volumes:
+          - /home/aqp/Projects/aqp/data:/app/data  # Mounting the volume to the FastAPI container
 
     flutter:
         container_name: flutter
@@ -28,6 +30,8 @@ services:
           - POSTGRES_DB=aqp #optional (specify default database instead of $POSTGRES_DB)
         ports:
           - "5432:5432"
+        volumes:
+          - pgdb-data:/var/lib/postgresql/data
         restart: always
     
     pgadmin:
@@ -38,7 +42,10 @@ services:
           - PGADMIN_DEFAULT_PASSWORD=aqp
         ports:
           - "8765:80"
+        volumes:
+          - pgadmin-data:/var/lib/pgadmin
         restart: always
 
 volumes:
-  db-data:
+  pgadmin-data:
+  pgdb-data:
