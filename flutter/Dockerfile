@@ -1,8 +1,5 @@
-# Use an image with both Python and Flutter
+# flutter dockerfile
 FROM python:3.13.0a4-bookworm
-
-# Install Flutter dependencies (assuming Flutter SDK is used in your project)
-# ...
 
 # Create and set the working directory
 RUN mkdir /app/

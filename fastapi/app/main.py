@@ -4,11 +4,21 @@ from sqlalchemy.orm import Session
 from app import crud, models, schemas
 from app.database import SessionLocal, engine
 
+from fastapi.middleware.cors import CORSMiddleware
+
 models.Base.metadata.create_all(bind=engine)
 
-app = FastAPI()
+app = FastAPI(debug=True)
 
+origins = ["*"]
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Dependency
 def get_db():
     db = SessionLocal()
@@ -18,12 +28,24 @@ def get_db():
         db.close()
 
 
-@app.post("/users/", response_model=schemas.User)
+@app.post("/user/", response_model=schemas.User)
 def create_user(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db_user = crud.get_user_by_email(db, email=user.email)
     if db_user:
         raise HTTPException(status_code=400, detail="Email already registered")
     return crud.create_user(db=db, user=user)
+
+
+@app.post("/dogbones/", response_model=schemas.Dogbone)
+def create_dogbone(dogbone: schemas.DogboneCreate, db: Session = Depends(get_db)):
+    # Assuming you have a user_id associated with the dogbone, you can get it from the token or another source
+    return crud.create_dogbone(db=db, dogbone=dogbone)
+
+
+@app.get("/dogbones/", response_model=list[schemas.Dogbone])
+def read_dogbones(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+    dogbones = crud.get_dogbones(db, skip=skip, limit=limit)
+    return dogbones
 
 
 @app.get("/users/", response_model=list[schemas.User])
@@ -51,3 +73,7 @@ def create_item_for_user(
 def read_items(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     items = crud.get_items(db, skip=skip, limit=limit)
     return items
+
+
+@app.get("/ips/")
+def get_ips():

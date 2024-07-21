@@ -1,7 +1,9 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, DateTime, LargeBinary # Import DateTime
 from sqlalchemy.orm import relationship
-
+from datetime import datetime
 from app.database import Base
+from fastapi import UploadFile
+
 
 
 class User(Base):
@@ -24,3 +26,16 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="items")
+
+class Dogbone(Base):
+    __tablename__ = "dogbones"
+    
+    id = Column(Integer, primary_key=True)
+    timestamp = Column(DateTime)
+    number = Column(String, index=True)
+    note = Column(String, index=True)
+    length = Column(String)
+    width = Column(String)
+    thickness = Column(String)
+    file_name = Column(String)
+    file_data = Column(String)
